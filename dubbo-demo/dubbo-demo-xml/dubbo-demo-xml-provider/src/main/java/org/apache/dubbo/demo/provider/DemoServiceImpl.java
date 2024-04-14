@@ -24,32 +24,43 @@ import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// DemoService 接口的实现类
 public class DemoServiceImpl implements DemoService {
     private static final Logger logger = LoggerFactory.getLogger(DemoServiceImpl.class);
 
+    // 实现 sayHello 方法
     @Override
     public String sayHello(String name) {
+        // 输出日志，记录请求信息
         logger.info("Hello " + name + ", request from consumer: "
                 + RpcContext.getServiceContext().getRemoteAddress());
         try {
+            // 模拟处理时间
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // 返回响应信息
         return "Hello " + name + ", response from provider: "
                 + RpcContext.getServiceContext().getLocalAddress();
     }
 
+    // 实现 sayHelloAsync 方法
     @Override
     public CompletableFuture<String> sayHelloAsync(String name) {
+        // 创建一个 CompletableFuture 对象，并异步执行任务
         CompletableFuture<String> cf = CompletableFuture.supplyAsync(() -> {
             //            try {
             //                Thread.sleep(1000);
             //            } catch (InterruptedException e) {
             //                e.printStackTrace();
             //            }
+            // 这里可以进行异步处理，例如调用其他服务或者执行耗时操作
+
+            // 返回异步结果
             return "async result";
         });
+        // 返回 CompletableFuture 对象
         return cf;
     }
 }

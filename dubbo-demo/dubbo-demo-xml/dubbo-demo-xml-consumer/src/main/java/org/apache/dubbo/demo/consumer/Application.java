@@ -36,13 +36,17 @@ public class Application {
      * launch the application
      */
     public static void main(String[] args) throws Exception {
+        // 加载 Spring 配置文件
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-consumer.xml");
+        // 启动 Spring 容器
         context.start();
+        // 获取 Dubbo 服务代理对象
         DemoService demoService = context.getBean("demoService", DemoService.class);
         GreetingService greetingService = context.getBean("greetingService", GreetingService.class);
         RestDemoService restDemoService = context.getBean("restDemoService", RestDemoService.class);
         TripleService tripleService = context.getBean("tripleService", TripleService.class);
 
+        // 启动一个新线程，调用 GreetingService 的方法
         new Thread(() -> {
                     while (true) {
                         try {
@@ -59,6 +63,7 @@ public class Application {
                 })
                 .start();
 
+        // 启动一个新线程，调用 RestDemoService 的方法
         new Thread(() -> {
                     while (true) {
                         try {
@@ -89,6 +94,7 @@ public class Application {
                 })
                 .start();
 
+        // 主线程调用 Dubbo 服务的方法
         while (true) {
             try {
                 CompletableFuture<String> hello = demoService.sayHelloAsync("world");

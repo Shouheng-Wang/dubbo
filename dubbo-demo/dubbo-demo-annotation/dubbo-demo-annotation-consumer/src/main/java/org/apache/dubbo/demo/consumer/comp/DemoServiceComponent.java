@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component("demoServiceComponent")
 public class DemoServiceComponent implements DemoService {
+    // 使用 @DubboReference 注解引用远程的 DemoService 服务
     @DubboReference
     private DemoService demoService;
 
@@ -33,6 +34,7 @@ public class DemoServiceComponent implements DemoService {
         return demoService.sayHello(name);
     }
 
+    // 实现 DemoService 接口的方法，暂时不支持异步调用，返回 null
     @Override
     public CompletableFuture<String> sayHelloAsync(String name) {
         return null;
